@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Recruiter Profile</title>
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/styles.css}">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/7.3.0/css/all.css}">
+</head>
+<body>
+<div class="row" style="margin: 0;">
+    <div class="col-5 coffee_mug_background">
+        <div class="logo_left mt-3 pt-4 ms-5 pl-5">
+            <h2 class="logo" style="color: white;">gatesajobs<span class="logo_com">.com</span></h2>
+        </div>
+    </div>
+    <div class="col-7">
+        <div class="myForm">
+            <form th:action="@{/recruiter-profile/addNew}" th:object="${recruiterProfile}" method="post" enctype="multipart/form-data">
+                <div class="row gutters">
+                    <div class="row mt-5">
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-center">
+                                <h1 class="heading_font font-weight-bold">Recruiter</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div>
+                                    <h2 class="d-flex justify-content-center heading_font">Set up your Profile</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body ms-2.5">
+                            <label class="heading_font font_sub_heading_color">Name</label>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <input type="text" th:field="*{firstName}" placeholder="First Name" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <input type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <input type="text" th:field="*{city}" placeholder="City" class="form-control">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <input type="text" th:field="*{state}" placeholder="State" class="form-control">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <input type="text" th:field="*{country}" placeholder="Country" class="form-control">
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <input type="text" th:field="*{company}" placeholder="Company" class="form-control">
+                        </div>
+
+                        <div class="card-body ms-2.5">
+                            <label class="heading_font font_sub_heading_color">Profile Photo</label>
+                        </div>
+
+                        <div class="col-md-12 mb-4">
+                            <input type="file" name="image" class="form-control">
+                        </div>
+
+                        <div class="col-md-12 d-flex justify-content-center mb-5">
+                            <button type="submit" class="myBtn" style="width: 200px;">Save</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

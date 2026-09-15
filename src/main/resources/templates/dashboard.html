@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-    xmlns = "http://www.w3.org/1999/xhtml"
-    xmlns: th="http://www.thymeleaf.org"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
@@ -21,7 +21,7 @@
         <button class="navbar-toggler"
                 type="button"
                 data-toggle="collapse"
-                data-target="#navbarTogglerDemo02"
+                data-target="#navbarToggler"
                 aria-controls="navbarTogglerDemo02"
                 aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -39,19 +39,26 @@
                     <a sec:authorize="hasAuthority('Job Seeker')" class="nav-link" th:href="@{/job-seeker-profile}"><i class="fa-solid fa-pencil"></i>Edit Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a sec:authorize="hasAuthority('Recruiter')" class="nav-link" th:href="@{/dashboard/add}"><i class="fa=solid fa-file-circle-plus"></i>Post New Job</a>
+                    <a sec:authorize="hasAuthority('Recruiter')" class="nav-link" th:href="@{/dashboard/add}"><i class="fa-solid fa-file-circle-plus"></i>Post New Job</a>
                 </li>
                 <li class="nav-item active">
-                    <a sec:authorize="hasAuthority('Recruiter')" class="nav-link" th:href="@{/dashbord}"><i class="fa=solid fa--eye"></i>View Your Jobs</a>
+                    <a sec:authorize="hasAuthority('Recruiter')" class="nav-link" th:href="@{/dashboard}"><i class="fa-solid fa-eye"></i>View Your Jobs</a>
                 </li>
                 <li class="nav-item">
-                    <a sec:authorize="hasAuthority('Recruiter')" class="nav-link" th:href="@{/recruit-profile}"><i class="fa=solid fa-pencil"></i>Edit Account</a>
+                    <a sec:authorize="hasAuthority('Recruiter')" class="nav-link" th:href="@{/recruiter-profile}"><i class="fa-solid fa-pencil"></i>Edit Account</a>
                 </li>
             </ul>
+            <img class="rounded-circle me-3"
+                 height="50px"
+                 width="50px"
+                 th:if="${user.photosImagePath != null}"
+                 th:src="${user?.photosImagePath}"
+            />
             <label th:if="${user.firstName != null && user.lastName != null}" th:text="${user.firstName+' '+user.lastName}" class="nav-item nav-link px-2 me-3"></label>
             <label th:unless="${user.firstName != null && user.lastName != null}" th:text="${username}" class="nav-item nav-link px-2 me-3"></label>
             <button class="myBtn-light me-5" onclick="window.location.href='/logout'">Logout</button>
         </div>
     </header>
+    <script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.min.js}"></script>
 </body>
 </html>

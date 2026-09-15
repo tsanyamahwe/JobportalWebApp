@@ -40,4 +40,10 @@ public class JobSeekerProfile {
     public JobSeekerProfile(Users users) {
         this.userId = users;
     }
+
+    @Transient
+    public String getPhotosImagePath(){
+        if(profilePhoto == null){return null;}
+        return "/photos/jobseeker/"+userAccountId +"/"+profilePhoto;
+    }
 }

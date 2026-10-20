@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Summernote fragments</title></head>
+<body>
+
+<!--
+  Reusable Summernote fragments.
+  Place this file at: src/main/resources/templates/fragments/summernote.html
+
+  In a page template:
+    <head>
+      <th:block th:replace="~{fragments/summernote :: css}"></th:block>
+    </head>
+    <body>
+      <form th:object="${post}" method="post" th:action="@{/posts}">
+        <th:block th:replace="~{fragments/summernote :: editor('body', 400, '/api/uploads/images')}"></th:block>
+        <button type="submit">Save</button>
+      </form>
+      <th:block th:replace="~{fragments/summernote :: js}"></th:block>
+    </body>
+
+  Swap summernote-lite for summernote-bs5 / summernote-bs4 if your page already
+  loads Bootstrap 5 or Bootstrap 4 (see README).
+-->
+
+<!-- ============================ CSS ============================ -->
+<th:block th:fragment="css">
+  <link rel="stylesheet" th:href="@{/vendor/summernote/summernote-lite.min.css}"/>
+</th:block>
+
+<!-- Bootstrap 5 variant -->
+<th:block th:fragment="css-bs5">
+  <link rel="stylesheet" th:href="@{/vendor/bootstrap-5/bootstrap.min.css}"/>
+  <link rel="stylesheet" th:href="@{/vendor/summernote/summernote-bs5.min.css}"/>
+</th:block>
+
+<!-- Bootstrap 4 variant -->
+<th:block th:fragment="css-bs4">
+  <link rel="stylesheet" th:href="@{/vendor/bootstrap-4/bootstrap.min.css}"/>
+  <link rel="stylesheet" th:href="@{/vendor/summernote/summernote-bs4.min.css}"/>
+</th:block>
+
+<!-- ============================ JS ============================= -->
+<th:block th:fragment="js">
+  <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+  <script th:src="@{/vendor/summernote/summernote-lite.min.js}"></script>
+  <script th:src="@{/js/summernote-init.js}"></script>
+</th:block>
+
+<th:block th:fragment="js-bs5">
+  <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+  <script th:src="@{/vendor/bootstrap-5/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/vendor/summernote/summernote-bs5.min.js}"></script>
+  <script th:src="@{/js/summernote-init.js}"></script>
+</th:block>
+
+<th:block th:fragment="js-bs4">
+  <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+  <script th:src="@{/vendor/bootstrap-4/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/vendor/summernote/summernote-bs4.min.js}"></script>
+  <script th:src="@{/js/summernote-init.js}"></script>
+</th:block>
+
+<!-- ==================== CSRF meta tags ========================= -->
+<!-- Include inside <head> when Spring Security is on the classpath. -->
+<th:block th:fragment="csrf-meta" sec:authorize="true">
+  <meta name="_csrf" th:content="${_csrf?.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf?.headerName}"/>
+</th:block>
+
+<!-- ======================== Editor ============================= -->
+<!--
+  field       : the name of the property on your form-backing object
+  height      : editor height in pixels
+  uploadUrl   : endpoint receiving multipart images; pass '' to keep base64
+-->
+<th:block th:fragment="editor(field, height, uploadUrl)">
+  <textarea class="summernote"
+            th:field="*{__${field}__}"
+            th:attr="data-height=${height},
+                     data-upload-url=${uploadUrl}"></textarea>
+</th:block>
+
+<!-- Same, but without th:field (use when there is no th:object on the form). -->
+<th:block th:fragment="editor-plain(field, content, height, uploadUrl)">
+  <textarea class="summernote"
+            th:name="${field}"
+            th:id="${field}"
+            th:utext="${content}"
+            th:attr="data-height=${height},
+                     data-upload-url=${uploadUrl}"></textarea>
+</th:block>
+
+<!-- ==================== Read-only output ======================= -->
+<!--
+  Renders saved Summernote HTML. Always sanitise on the server first
+  (see README - Jsoup section) before using th:utext.
+-->
+<th:block th:fragment="render(content)">
+  <div class="summernote-content" th:utext="${content}"></div>
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Post New Job</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Summernote, Bootstrap 5 build, full toolbar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs5.min.css">
+
+    <style>
+        :where(.heading_font) { font-family: 'Montserrat', sans-serif; }
+        :where(.font_sub_heading_color) { color: #0b2a4a; text-transform: uppercase; }
+
+        /* Image panel stays in view while the form scrolls */
+        .image-side { position: sticky; top: 0; height: 100vh; }
+        .image-side .coffee_mug_background { height: 100%; }
+        @media (max-width: 767.98px) { .image-side { display: none; } }
+
+        /* Inputs and dropdowns: same height, no stray margins, so all three line up */
+        .job-add-form input.form-control,
+        .job-add-form select.form-control {
+            display: block;
+            width: 100%;
+            height: 62px;
+            margin: 0 !important;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+<div class="row g-0 min-vh-100">
+
+    <!-- LEFT: coffee mug image + logo -->
+    <div class="col-md-5 image-side">
+        <div class="coffee_mug_background">
+            <div class="logo_left mt-3 pt-4 ms-5 ps-5">
+                <h2 class="logo">gatesajobs<span class="logo_com">.com</span></h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT: Post New Job form -->
+    <div class="col-md-7">
+        <div class="myForm px-4 px-lg-5 py-4">
+            <form id="job-main-form" th:action="@{/dashboard/addNew}" th:object="${jobPostActivity}"
+                  method="post" class="job-add-form">
+
+                <input type="hidden" th:field="*{jobPostId}">
+                <input type="hidden" th:field="*{jobLocationId.id}">
+                <input type="hidden" th:field="*{jobCompanyId.id}">
+
+                <div class="d-flex justify-content-center pt-3 mb-3">
+                    <h1 class="heading_font fw-normal">Post New Job</h1>
+                </div>
+
+                <label class="heading_font font_sub_heading_color mb-1">Job Details</label>
+
+                <div class="mb-3">
+                    <input id="title" type="text" th:field="*{jobTitle}" class="form-control"
+                           placeholder="Job Title" required>
+                </div>
+
+                <div class="row align-items-start">
+                    <div class="col-md-4 mb-3">
+                        <select id="type" th:field="*{jobType}" class="form-control" required>
+                            <option value="">Employment Type</option>
+                            <option value="Full-time">Full time</option>
+                            <option value="Part-time">Part time</option>
+                            <option value="Freelance">Freelance</option>
+                            <option value="Internship">Internship</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <select id="remote" th:field="*{remote}" class="form-control" required>
+                            <option value="">Select a Remote</option>
+                            <option value="Remote-Only">Remote Only</option>
+                            <option value="Office-Only">Office Only</option>
+                            <option value="Partial-Remote">Partial Remote</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <input id="salary" th:field="*{salary}" type="text" class="form-control"
+                               placeholder="Salary">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="content" class="heading_font font_sub_heading_color mb-1">Description</label>
+                    <textarea id="content" rows="4" class="form-control"
+                              th:field="*{descriptionOfJob}" autocomplete="off" placeholder="Content"></textarea>
+                </div>
+
+                <label class="heading_font font_sub_heading_color mb-1">Location</label>
+                <div class="row align-items-start">
+                    <div class="col-md-4 mb-3">
+                        <input th:field="*{jobLocationId.city}" id="city" type="text"
+                               class="form-control" placeholder="City">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <input th:field="*{jobLocationId.state}" id="state" type="text"
+                               class="form-control" placeholder="State">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <input th:field="*{jobLocationId.country}" id="country" type="text"
+                               class="form-control" placeholder="Country">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="company_name" class="heading_font font_sub_heading_color mb-1">Company</label>
+                    <input id="company_name" th:field="*{jobCompanyId.name}" type="text"
+                           class="form-control" placeholder="Company Name">
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary base_button px-4 py-2 mb-5">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Script order matters: jQuery, then Bootstrap bundle, then Summernote -->
+<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs5.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+<script>
+    function startEditor() {
+        if (!(window.jQuery && jQuery.fn.summernote)) {
+            console.error('Summernote did not load. Check the Network tab for failed (red) requests.');
+            return;
+        }
+        // Safety net: Summernote's toolbar needs $.fn.tooltip, which Bootstrap adds to jQuery
+        // only after the page has loaded. If it is still missing, use an empty stand-in
+        // so the toolbar can still be built.
+        if (!jQuery.fn.tooltip) {
+            jQuery.fn.tooltip = function () { return this; };
+        }
+        $('#content').summernote({ height: 120 });
+    }
+
+    // Wait until the page has finished loading so Bootstrap has registered its jQuery plugins
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startEditor);
+    } else {
+        startEditor();
+    }
+</script>
+</body>
+</html>

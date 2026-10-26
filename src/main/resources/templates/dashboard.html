@@ -1,64 +1,184 @@
 <!DOCTYPE html>
 <html lang="en"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:th="http://www.thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <meta name="description" content=""/>
     <title>Dashboard</title>
 
-    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/styles.css}">
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
-    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/7.3.0/css/all.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/7.3.0/css/all.css}"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --brand: #fc4f1b; --ink: #1d2433; --muted: #6b7280; --line: #e5e7eb; }
+
+        /* Fallbacks: your styles.css wins if it already styles these */
+        :where(header.navbar) { background-color: var(--ink); }
+        :where(body) { background-color: #f4f5f7; font-family: 'Montserrat', system-ui, sans-serif; color: var(--ink); }
+
+        .brand-link { color: #fff; text-decoration: none; }
+        .nav-link i { margin-right: .4rem; }
+        /* Active menu item: orange, like the Logout button */
+        .navbar .navbar-nav .nav-link.active,
+        .navbar .navbar-nav .nav-link.active:hover,
+        .navbar .navbar-nav .nav-link.active:focus {
+             color: var(--brand) !important;
+             font-weight: 600;
+        }
+
+        /* Optional: other menu items turn orange when you hover over them */
+        .navbar .navbar-nav .nav-link:hover {
+            color: var(--brand);
+        }
+
+        .dash-title { font-weight: 600; font-size: 1.75rem; margin: 0; }
+        .box { background: #fff; border-radius: 14px; padding: 1.25rem; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+        .large-label { font-weight: 600; font-size: 1.1rem; }
+        .count-pill { background: #f1f2f4; color: var(--muted); border-radius: 999px;
+                      font-size: .8rem; padding: .15rem .65rem; margin-left: .5rem; }
+
+        .job-link { display: block; color: inherit; text-decoration: none; }
+        .job-row { border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.25rem;
+                   margin-top: .75rem; transition: box-shadow .15s, border-color .15s, transform .15s; }
+        .job-link:hover .job-row { border-color: var(--brand); box-shadow: 0 4px 14px rgba(0,0,0,.08);
+                                   transform: translateY(-1px); }
+        .job-title { font-weight: 600; font-size: 1.05rem; }
+        .applied-badge { display: inline-block; background: #fff1ec; color: var(--brand);
+                         border-radius: 999px; font-size: .72rem; font-weight: 600;
+                         padding: .15rem .6rem; margin-left: .5rem; vertical-align: middle; }
+        .job-meta { color: var(--muted); font-size: .92rem; }
+        .job-meta i { color: var(--brand); margin-right: .4rem; }
+
+        .empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted); }
+        .empty-state i { font-size: 2.5rem; color: var(--brand); margin-bottom: 1rem; }
+    </style>
 </head>
 <body>
-    <header class="navbar navbar-expand-lg navbar-dark">
-        <label class="mt-2 ms-5 font-weight-bold h5"><a href="/">gatesajobs</a><span class="logo_com font-weight-bold h5" style="...">.com</span></label>
-        <button class="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarToggler"
-                aria-controls="navbarTogglerDemo02"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-             <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarToggler">
-            <ul class="navbar-nav m-auto mat-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a sec:authorize="hasAuthority('Job Seeker')" class="nav-link" th:href="@{/dashboard/search}"><i class="fas fa-search"></i>Search for Jobs</a>
-                </li>
-                <li class="nav-item">
-                    <a sec:authorize="hasAuthority('Job Seeker')" class="nav-link" th:href="@{/saved-jobs}"><i class="fa-solid fa-eye"></i>View Saved Jobs</a>
-                </li>
-                <li class="nav-item">
-                    <a sec:authorize="hasAuthority('Job Seeker')" class="nav-link" th:href="@{/job-seeker-profile}"><i class="fa-solid fa-pencil"></i>Edit Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a sec:authorize="hasAuthority('Recruiter')" class="nav-link" th:href="@{/dashboard/add}"><i class="fa-solid fa-file-circle-plus"></i>Post New Job</a>
-                </li>
-                <li class="nav-item active">
-                    <a sec:authorize="hasAuthority('Recruiter')" class="nav-link" th:href="@{/dashboard}"><i class="fa-solid fa-eye"></i>View Your Jobs</a>
-                </li>
-                <li class="nav-item">
-                    <a sec:authorize="hasAuthority('Recruiter')" class="nav-link" th:href="@{/recruiter-profile}"><i class="fa-solid fa-pencil"></i>Edit Account</a>
-                </li>
-            </ul>
-            <img class="rounded-circle me-3"
-                 height="50px"
-                 width="50px"
-                 th:if="${user.photosImagePath != null}"
-                 th:src="@{${user?.photosImagePath}}"
-            />
-            <label th:if="${user.firstName != null && user.lastName != null}" th:text="${user.firstName+' '+user.lastName}" class="nav-item nav-link px-2 me-3"></label>
-            <label th:unless="${user.firstName != null && user.lastName != null}" th:text="${username}" class="nav-item nav-link px-2 me-3"></label>
-            <button class="myBtn-light me-5" onclick="window.location.href='/logout'">Logout</button>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand ms-5 fw-bold h5 mb-0 brand-link" th:href="@{/}">gatesajobs<span class="logo_com fw-bold h5">.com</span></a>
+
+    <button class="navbar-toggler me-3"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarToggler"
+            aria-controls="navbarToggler"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarToggler">
+        <ul class="navbar-nav m-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a sec:authorize="hasAuthority('Job Seeker')" class="nav-link" th:href="@{/dashboard/search}"><i class="fa-solid fa-magnifying-glass"></i>Search for Jobs</a>
+            </li>
+            <li class="nav-item">
+                <a sec:authorize="hasAuthority('Job Seeker')" class="nav-link" th:href="@{/saved-jobs}"><i class="fa-solid fa-eye"></i>View Saved Jobs</a>
+            </li>
+            <li class="nav-item">
+                <a sec:authorize="hasAuthority('Job Seeker')" class="nav-link" th:href="@{/job-seeker-profile}"><i class="fa-solid fa-pencil"></i>Edit Profile</a>
+            </li>
+            <li class="nav-item">
+                <a sec:authorize="hasAuthority('Recruiter')" class="nav-link" th:href="@{/dashboard/add}"><i class="fa-solid fa-file-circle-plus"></i>Post New Job</a>
+            </li>
+            <li class="nav-item">
+                <a sec:authorize="hasAuthority('Recruiter')" class="nav-link active" th:href="@{/dashboard}"><i class="fa-solid fa-eye"></i>View Your Jobs</a>
+            </li>
+            <li class="nav-item">
+                <a sec:authorize="hasAuthority('Recruiter')" class="nav-link" th:href="@{/recruiter-profile}"><i class="fa-solid fa-pencil"></i>Edit Account</a>
+            </li>
+        </ul>
+
+        <img class="rounded-circle me-3"
+             height="50" width="50" alt="Profile photo"
+             th:if="${user != null and user.photosImagePath != null}"
+             th:src="@{${user.photosImagePath}}"/>
+
+        <label th:if="${user != null and user.firstName != null and user.lastName != null}"
+               th:text="${user.firstName + ' ' + user.lastName}"
+               class="nav-item nav-link px-2 me-3"></label>
+        <label th:unless="${user != null and user.firstName != null and user.lastName != null}"
+               th:text="${username}"
+               class="nav-item nav-link px-2 me-3"></label>
+
+        <button class="myBtn-light me-5" onclick="window.location.href='/logout'">Logout</button>
+    </div>
+</header>
+
+<!-- ============ PAGE CONTENT ============ -->
+<main class="container py-4">
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+        <h1 class="dash-title" sec:authorize="hasAuthority('Recruiter')">Recruiter Dashboard</h1>
+        <h1 class="dash-title" sec:authorize="hasAuthority('Job Seeker')">Job Seeker Dashboard</h1>
+
+        <a sec:authorize="hasAuthority('Recruiter')"
+           class="btn btn-primary base_button px-4 py-2"
+           th:href="@{/dashboard/add}"><i class="fa-solid fa-plus me-2"></i>Post New Job</a>
+    </div>
+
+    <div class="box">
+        <div class="d-flex align-items-center px-1">
+            <label class="large-label" sec:authorize="hasAuthority('Recruiter')">Your Posted Jobs</label>
+            <label class="large-label" sec:authorize="hasAuthority('Job Seeker')">Search Results</label>
+            <span class="count-pill" th:if="${jobPost != null}" th:text="${jobPost.size()}">0</span>
         </div>
-    </header>
-    <script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.min.js}"></script>
+
+        <!-- Empty state -->
+        <div class="empty-state" th:if="${jobPost == null or jobPost.isEmpty()}">
+            <div><i class="fa-regular fa-folder-open"></i></div>
+            <p class="mb-3">No jobs to show yet.</p>
+            <a sec:authorize="hasAuthority('Recruiter')"
+               class="btn btn-primary base_button px-4 py-2"
+               th:href="@{/dashboard/add}">Post your first job</a>
+        </div>
+
+        <!-- List of jobs: the whole row is clickable -->
+        <th:block th:each="jobPost : ${jobPost}">
+            <a class="job-link" th:href="@{/job-details-apply/{id}(id=${jobPost.jobPostId})}">
+                <div class="job-row">
+                    <div class="row align-items-center g-2">
+
+                        <!-- Title + candidates badge (recruiters only) -->
+                        <div class="col-md-4">
+                            <span class="job-title" th:text="${jobPost.jobTitle}">Job title</span>
+                            <span class="applied-badge"
+                                  sec:authorize="hasAuthority('Recruiter')"
+                                  th:text="|${jobPost.totalCandidates} ${jobPost.totalCandidates == 1 ? 'candidate' : 'candidates'} applied|">
+                                0 candidates applied
+                            </span>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="col-md-4 job-meta">
+                            <span th:if="${jobPost.jobLocationId != null}">
+                                <i class="fa-solid fa-location-dot"></i><span th:text="|${jobPost.jobLocationId.city}, ${jobPost.jobLocationId.state}|">City, State</span>
+                            </span>
+                        </div>
+
+                        <!-- Company -->
+                        <div class="col-md-4 job-meta">
+                            <span th:if="${jobPost.jobCompanyId != null}">
+                                <i class="fa-solid fa-building"></i><span th:text="${jobPost.jobCompanyId.name}">Company</span>
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </a>
+        </th:block>
+    </div>
+</main>
+
+<!-- The bundle includes Popper, which the navbar toggler needs -->
+<script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

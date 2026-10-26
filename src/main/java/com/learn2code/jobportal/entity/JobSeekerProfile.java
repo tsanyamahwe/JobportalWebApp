@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class JobSeekerProfile {
     @Id
-    private int userAccountId;
+    private Integer userAccountId;
 
     @OneToOne
     @JoinColumn(name = "user_account_id")
@@ -43,7 +43,7 @@ public class JobSeekerProfile {
 
     @Transient
     public String getPhotosImagePath(){
-        if(profilePhoto == null){return null;}
+        if(profilePhoto == null || userAccountId==null){return null;}
         return "/photos/jobseeker/"+userAccountId +"/"+profilePhoto;
     }
 }
